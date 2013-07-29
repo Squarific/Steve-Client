@@ -1,0 +1,403 @@
+@import "elements";     //
+@import "font-awesome"; //
+@import "normalize";    //
+@import "../3rd/codemirror/lib/codemirror.less";
+@import "../3rd/codemirror/theme/tomorrow-night-eighties.less";
+@import "main_pre";     //
+//////////////////////////
+
+@sans: "Chivo";
+@mono: "Source Code Pro";
+
+@orange: #E38E2D;
+@darkgrey: #2d2d2d;
+@error-red: #A42517;
+@success-green: #297416;
+
+@tabs-height: 40px;
+@z-index: 5000;
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box; 
+    box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
+img, table {
+    border: none;
+}
+
+input[type=checkbox], input[type=radio] {
+    position: relative;
+    width: 14px;
+    height: 14px;
+
+    &:before {
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0 left: 0;
+        font-family: "FontAwesome";
+        font-size: 15px;
+        content: "\f096";
+
+        background-color: darken(#EEE, 10%);
+    }
+
+    &:checked:before {
+        content: "\f046";
+    }
+}
+
+input[type=radio] {
+    &:before {
+        content: "\f10c";
+    }
+
+    &:checked:before {
+        content: "\f111";
+    }
+}
+
+.startup {
+    position: absolute;
+    top: 0; left: 0;
+    right: 0; bottom: 0;
+    background-color: #EEE;
+
+    font-size: 48px;
+    font-family: @mono;
+
+    color: @orange;
+
+    z-index: @z-index + 1100;
+
+    div {
+        position: absolute;
+        top: 50%; left: 0;
+        width: 100%;
+        margin-top: -0.5em;
+        text-align: center;
+
+        span {
+            display: block;
+            color: #AAA;
+            font-family: @sans;
+            font-size: 24px;
+        }
+    }
+}
+
+.content {
+    position: absolute;
+    top: @tabs-height;
+    left: 200px; right: @tabs-height;
+    bottom: 0;
+
+    .user-select(none);
+}
+
+.additionalview {
+    display: none;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: @tabs-height;
+    height: 0;
+
+    box-shadow: 0 0 10px #444;
+
+    & > .separator {
+        position: absolute;
+        top: 0; left: 0;
+
+        width: 100%;
+        height: 5px;
+        background-color: #333;
+    }
+}
+
+.tabs, .sidebar, .steve {
+    .user-select(none);
+    cursor: default; // force regular cursor over selected cursor
+}
+
+.tabs, .sidebar, .settings, .content, .startup {
+    background-image: url(../img/noise.png);
+}
+
+.tab {
+    background-image: url("../img/noise_fade.png");
+    background-repeat: repeat-x;
+}
+
+.steve {
+    position: absolute;
+    display: block;
+    width: 200px;
+    top: -2px; left: 0;
+
+    line-height: @tabs-height;
+    font-family: @mono;
+    font-size: @tabs-height - 15;
+    text-align: center;
+
+    padding: 0 10px;
+    color: @orange;
+
+    div {
+        display: inline-block;
+    }
+
+    span {
+        display: inline-block;
+        color: #222;
+    }
+
+    img {
+        display: none;
+    }
+
+    z-index: @z-index + 1050;
+}
+
+.tabs {
+    position: relative;
+    width: 100%;
+    height: @tabs-height;
+
+    padding: 8px 10px 0 200px;
+    background-color: #EEE;
+    
+    font-weight: normal;
+    font-size: 14px;
+    font-family: @sans;
+
+    z-index: @z-index + 1000;
+
+    .tab {
+        display: inline-block;
+        height: @tabs-height - 8;
+        
+        background-color: darken(#EEE, 10%);
+        border-top: 2px solid transparent;
+
+        transition-property: background-color, color;
+        .transition-duration(.3s);
+
+        &.active {
+            background-color: @darkgrey;
+            color: #EEE;
+        }
+
+        &.changed {
+            border-top-color: @orange;
+        }
+
+        &:not(.active):hover {
+            background-color: darken(#EEE, 20%);
+        }
+
+        .label, & > i {
+            padding: 0 10px;
+            line-height: @tabs-height - 8;
+        }
+
+        .label {
+            float: left;
+            display: inline-block;
+            max-width: 150px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        i {
+            transition-property: background-color, color;
+            .transition-duration(.2s);
+
+            &:hover {
+                color: @error-red;
+            }
+        }
+    }
+}
+
+.sidebar {
+    position: absolute;
+    top: @tabs-height;
+    left: 0;
+    bottom: 0;
+
+    font-family: "FontAwesome", @sans;
+    width: 200px;
+
+    .user-select(none);
+    background-color: #EEE;
+
+    .transition(.4s, ease);
+    transition-property: width;
+
+    z-index: @z-index + 500;
+
+    ul {
+        display: block;
+        height: 100%;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            padding: 3px 10px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            &:before {
+                margin-right: 5px;
+            }
+
+            &[data-type=folder]:before {
+                content: "\f07b";
+            }
+
+            &[data-type=open]:before {
+                content: "\f07c";
+            }
+
+            &[data-type=file]:before {
+                content: "\f15b";
+            }
+        }
+    }
+
+    li ul {
+        display: none;
+    }
+
+    &:hover {
+        width: 400px;
+
+        color: lighten(#222, 50%);
+
+        li:hover {
+            color: #222;
+        }
+    }
+}
+
+.settings {
+    position: absolute;
+    top: @tabs-height;
+    right: 0; bottom: 0;
+
+    .user-select(none);
+
+    width: @tabs-height;
+    background-color: #EEE;
+
+    .option {
+        position: relative;
+        margin-bottom: 10px;
+
+        & > i {
+            text-align: center;
+            display: block;
+            font-size: @tabs-height - 10;
+            line-height: @tabs-height;
+
+            color: lighten(#222, 50%);
+            text-shadow: 1px 0 0 #EEE;
+
+            .transition-duration(.15s);
+        }
+
+        & > div {
+            display: none;
+            position: absolute;
+            top: 0;
+            right: @tabs-height;
+
+            background-color: darken(#EEE, 10%);
+            min-height: @tabs-height;
+
+            padding: 10px;
+
+            border-left: 5px solid @orange;
+
+            h3 {
+                display: block;
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid darken(#EEE, 20%);
+
+                white-space: nowrap; // make box as big as headline minimum
+
+                i {
+                    color: lighten(#222, 50%);
+                }
+            }
+
+            .line {
+                white-space: nowrap; // again prevents wrap of elements
+            }
+        }
+
+        z-index: @z-index + 100;
+
+        &.active {
+
+            & > i {
+                background-color: darken(#EEE, 10%);
+                color: @orange;
+                text-shadow: 1px 1px 0 darken(@orange, 20%);
+            }
+
+        }
+    }
+}
+
+.modal {
+    position: absolute;
+    top: 0; left: 0;
+
+    padding: 10px 20px;
+
+    font-family: @sans;
+    color: #EEE;
+
+    z-index: @z-index + 5000;
+
+    &[data-type=success] {
+        background-color: @success-green;
+    }
+
+    &[data-type=error] {
+        background-color: @error-red;
+    }
+}
+
+/////////////////////////
+
+.CodeMirror {
+    height: 100%;
+
+    font-family: @mono;
+    font-size: 14px;
+}
+
+.ui-draggable-dragging {
+    z-index: @z-index + 2000;
+}
+
+/////////////////////////
+@import "main_post";   //

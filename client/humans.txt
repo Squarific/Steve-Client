@@ -1,0 +1,17 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Filip Smets -- Head Developer -- @squarific
+    Lukas Dietrich -- Head Developer -- @_lukasdietrich
+
+# THANKS
+
+    To our parents and that finnish dude in skype, love you bro.
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3
+    Normalize.css, jQuery, Modernizr
+    Java, Jetty

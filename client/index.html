@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Code+Pro|Chivo">
+        <link rel="stylesheet" href="css/main.css">
+        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    </head>
+    <body>
+        <div class="startup"><div>{<img src="img/steve.pending.gif">}<span>one moment</span></div></div>
+        <div class="modal visuallyhidden"></div>
+        <div class="wrapper">
+            <!-- banner -->
+            <div class="steve">
+                {<div><span>steve</span><img src="img/steve.pending.gif"></div>}
+            </div>
+
+            <!-- tabs -->
+            <div class="tabs">
+                <div class="tab">
+                    <span class="label">fgdfgdfgdfp</span>
+                    <i class="icon-remove"></i>
+                </div><div class="tab">
+                    <span class="label">other.php</span>
+                    <i class="icon-remove"></i>
+                </div><div class="tab active">
+                    <span class="label">index.php</span>
+                    <i class="icon-remove"></i>
+                </div>
+            </div>
+
+            <!-- sidebar -->
+            <div class="sidebar">
+                <ul>
+                    <li data-type="folder">3rd</li>
+                    <li data-type="folder">css<ul>
+                        <li data-type="file">elements.less</li>
+                        <li data-type="file">font-awesome.less</li>
+                        <li data-type="file">main.css</li>
+                        <li data-type="file">main.less</li>
+                        <li data-type="file">main_post.less</li>
+                        <li data-type="file">main_pre.less</li>
+                        <li data-type="file">normalize.less</li>
+                    </ul></li>
+                    <li data-type="folder">js<ul>
+                        <li data-type="folder">vendor<ul>
+                            <li data-type="file">jquery-1.10.2.min.js</li>
+                            <li data-type="file">jquery-ui-1.10.3.min.js</li>
+                            <li data-type="file">modernizr-2.6.2.min.js</li>
+                        </ul></li>
+                        <li data-type="file">main.js</li>
+                    </ul></li>
+                    <li data-type="file">404.html</li>
+                    <li data-type="file">favicon.ico</li>
+                    <li data-type="file">index.html</li>
+                </ul>
+            </div>
+
+            <!-- settings -->
+            <div class="settings">
+                <div class="option">
+                    <i class="icon-cog"></i>
+                    <div>
+                        <h3>Settings</h3>
+                        <div class="line"><span>Option</span> <input type="checkbox" value="Hans" /></div>
+                    </div>
+                </div>
+                <div class="option">
+                    <i class="icon-exchange "></i>
+                    <div>
+                        <h3>Download <i class="icon-plus"></i> Upload</h3>
+                        <div class="line"><span>Option</span> <input type="checkbox" value="Hans" /></div>
+                    </div>
+                </div>
+                <div class="option">
+                    <i class="icon-bug"></i>
+                    <div>
+                        <h3>Debug</h3>
+                        <div class="line"><span>Option</span> <input type="radio" value="Hans" /></div>
+                    </div>
+                </div>
+                <div class="option">
+                    <i class="icon-bolt"></i>
+                    <div>
+                        <h3>Run <i class="icon-plus"></i> Test</h3>
+                        <div class="line"><span>Option</span> <input type="checkbox" value="Hans" /></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- content -->
+            <div class="content">
+                <textarea id="code" name="code">function findSequence(goal) {
+  function find(start, history) {
+    if (start == goal)
+      return history;
+    else if (start > goal)
+      return null;
+    else
+      return find(start + 5, "(" + history + " + 5)") ||
+             find(start * 3, "(" + history + " * 3)");
+  }
+  return find(1, "1");
+}</textarea>
+            </div>
+
+            <!-- console, preview or whatever -->
+            <div class="additionalview">
+                <div class="separator"></div>
+            </div>
+        </div>
+
+        <script src="js/vendor/jquery-1.10.2.min.js"></script>
+        <script src="js/vendor/jquery-ui-1.10.3.min.js"></script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+        <script src="3rd/codemirror/lib/codemirror.js"></script>
+        <script src="3rd/codemirror/mode/javascript/javascript.js"></script>
+        <script src="3rd/codemirror/keymap/extra.js"></script>
+        <!-- no google analytics, cause its not hosted -->
+    </body>
+</html>
