@@ -1,4 +1,4 @@
 Steve-Client
 ============
 
-The repository for the Steve html5 colabration tool client.
+The repository for the Steve html5 collaboration tool client.
