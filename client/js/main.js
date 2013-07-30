@@ -29,7 +29,7 @@ $(document).ready(function () {
         console.log(doc.getDoc().sel.anchor.line);
     });
 
-    var tabs, tab, jj = -1;
+    var tabs, tab, jj = -1, i, $moved, t, o, tab1;
     $(".tab").draggable({ 
         axis: "x",
         start: function (e, ui) {
@@ -45,9 +45,6 @@ $(document).ready(function () {
                         jj = i;
                 }
             });
-
-            console.log(jj);
-
             tabs.sort(function (a, b) { return a.offset().left - b.offset().left });
         },
         stop: function (e, ui) {
