@@ -56,8 +56,8 @@ $(document).ready(function () {
 			if (tabs[key].dragging) {
 				continue;
 			}
-			tabs[key].style.left = this.leftOffsetOf(tabs, tabs[key].number) + 200 + "px"; // logo = 200
 			tabs[key].style.position = "absolute";
+			$(tabs[key]).animate({left: this.leftOffsetOf(tabs, tabs[key].number) + 200 + "px"}, {queu: false}); //Logo = 200
 		}
 	};
 	
@@ -147,11 +147,11 @@ $(document).ready(function () {
 			var tabs = ui.helper[0].parentNode.children,
 				before = this.tabBefore(tabs, ui.helper[0].number),
 				behind = this.tabBehind(tabs, ui.helper[0].number);
-			if (before && parseInt(before.style.left) + before.offsetWidth / 2 > parseInt(ui.helper[0].style.left)) {
+			if (before && this.leftOffsetOf(tabs, before.number) + 200 + before.offsetWidth / 3 > parseInt(ui.helper[0].style.left)) { //200 = LOGO
 				ui.helper[0].number = before.number;
 				before.number = ui.helper[0].number + 1;
 				this.setOrderedLeft(tabs);
-			} else if (behind && parseInt(behind.style.left) - behind.offsetWidth / 2 < parseInt(ui.helper[0].style.left)) {
+			} else if (behind && this.leftOffsetOf(tabs, behind.number) + 200 - behind.offsetWidth / 3 < parseInt(ui.helper[0].style.left)) { //200 = LOGO
 				behind.number = ui.helper[0].number;
 				ui.helper[0].number = behind.number + 1;
 				this.setOrderedLeft(tabs);
