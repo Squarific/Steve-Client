@@ -1,7 +1,7 @@
 $(document).ready(function () {
-
+	
     $(".startup").fadeOut(300, function () { $(this).remove() });
-
+	
     var modal = function (type, html) {
         $modal = $(".modal");
         if($modal.hasClass("visuallyhidden")) {
@@ -21,6 +21,7 @@ $(document).ready(function () {
     })
 
     editor.on("change", function (instance, change) {
+		console.log(change);
         $(".tab.active").addClass("changed");
     })
 
@@ -28,58 +29,139 @@ $(document).ready(function () {
         // had a function which didn't work ...
         console.log(doc.getDoc().sel.anchor.line);
     });
-
-    var tabs, tab, jj = -1, i, $moved, t, o, tab1;
-    $(".tab").draggable({ 
+	
+	var tabs = {};
+	
+	tabs.assureNumbered = function (tabs) {
+		if (!tabs || typeof tabs.length !== "number") {
+			throw "No tab list given";
+		}
+		for (var key = 0; key < tabs.length; key++) {
+			if (typeof tabs[key].number === "number") {
+				if (!this.numberNotUsedTwice(tabs, tabs[key].number)) {
+					tabs[key].number = this.lastNotUsedNumber(tabs);
+				}
+			} else {
+				tabs[key].number = this.lastNotUsedNumber(tabs);
+			}
+		}
+	};
+	
+	tabs.setOrderedLeft = function (tabs) {
+		if (!tabs || typeof tabs.length !== "number") {
+			throw "No tab list given";
+		}
+		this.assureNumbered(tabs);
+		for (var key = 0; key < tabs.length; key++) {
+			if (tabs[key].dragging) {
+				continue;
+			}
+			tabs[key].style.left = this.leftOffsetOf(tabs, tabs[key].number) + 200 + "px"; // logo = 200
+			tabs[key].style.position = "absolute";
+		}
+	};
+	
+	tabs.tabBefore = function (tabs, number) {
+		var highest;
+		if (!tabs || typeof tabs.length !== "number") {
+			throw "No tab list given";
+		}
+		for (var key = 0; key < tabs.length; key++) {
+			if ((!highest || highest.number < tabs[key].number) && tabs[key].number < number) {
+				highest = tabs[key];
+			}
+		}
+		return highest;
+	};
+	
+	tabs.tabBehind = function (tabs, number) {
+		var lowest;
+		if (!tabs || typeof tabs.length !== "number") {
+			throw "No tab list given";
+		}
+		for (var key = 0; key < tabs.length; key++) {
+			if ((!lowest || lowest.number > tabs[key].number) && tabs[key].number > number) {
+				lowest = tabs[key];
+			}
+		}
+		return lowest;
+	};
+	
+	tabs.numberNotUsedTwice = function (tabs, number) {
+		var used = false;
+		if (!tabs || typeof tabs.length !== "number") {
+			throw "No tab list given";
+		}
+		for (var key = 0; key < tabs.length; key++) {
+			if (tabs[key].number === number) {
+				if (used) {
+					return false;
+				}
+				used = true;
+			}
+		}
+		return true;
+	};
+	
+	tabs.lastNotUsedNumber = function (tabs) {
+		var number = 0;
+		if (!tabs || typeof tabs.length !== "number") {
+			throw "No tab list given";
+		}
+		for (var key = 0; key < tabs.length; key++) {
+			if (tabs[key].number >= number) {
+				number = tabs[key].number + 1;
+			}
+		}
+		return number;
+	};
+	
+	tabs.leftOffsetOf = function (tabs, number) {
+		var offset = 0;
+		if (!tabs || typeof tabs.length !== "number") {
+			throw "No tab list given";
+		}
+		for (var key = 0; key < tabs.length; key++) {
+			if (tabs[key].number < number) {
+				offset += tabs[key].offsetWidth;
+			}
+		}
+		return offset;
+	};
+	
+    $(".tab").draggable({
         axis: "x",
-        start: function (e, ui) {
-            tab = ui.helper;
-            tabs = [];
-            i = 0;
-            $(".tabs").find(".tab").each(function () {
-                if(tab[0] != this) {
-                    tabs.push($(this));
-                    i+= 1;
-                } else {
-                    if(jj == -1)
-                        jj = i;
-                }
-            });
-            tabs.sort(function (a, b) { return a.offset().left - b.offset().left });
-        },
+		start: function (e, ui) {
+			var tabs = ui.helper[0].parentNode.children;
+			ui.helper[0].dragging = true;
+			this.assureNumbered(tabs);
+			this.setOrderedLeft(tabs);
+		}.bind(tabs),
         stop: function (e, ui) {
-            $moved = [];
-            jj = -1;
-
-            if($(".moved-right").length) {
-                $($(".moved-right")[0]).before(tab);
-            } else if($(".moved-left").length) {
-                t = $(".moved-left");
-                $(t[t.length-1]).after(tab);
-            }
-            $(".tabs").find(".tab").stop().css({"left" : "0"}).removeClass("moved-right").removeClass("moved-left");
-        },
+			var tabs = ui.helper[0].parentNode.children;
+			ui.helper[0].dragging = false;
+			this.assureNumbered(tabs);
+			this.setOrderedLeft(tabs);
+        }.bind(tabs),
         drag: function (e, ui) {
-            o = ui.originalPosition.left + ui.offset.left;
-
-            if(ui.position.left < 0) {
-                for (var i = jj-1; i >= 0; i--) {
-                    tab1 = tabs[i];
-                    if(o < tab1.offset().left + tab1.outerWidth() / 2 && !tab1.hasClass("moved-right")) {
-                        tab1.animate({"left" : tab.outerWidth() }, 300).addClass("moved-right");
-                    }
-                }
-            } else {
-                for (var i = jj; i < tabs.length; i++) {
-                    tab1 = tabs[i];
-                    if(o > tab1.offset().left - tab1.outerWidth() / 2  && !tab1.hasClass("moved-left")) {
-                        tab1.animate({"left" : -tab.outerWidth() }, 300).addClass("moved-left");
-                    }
-                }
-            }
-        }
+			var tabs = ui.helper[0].parentNode.children,
+				before = this.tabBefore(tabs, ui.helper[0].number),
+				behind = this.tabBehind(tabs, ui.helper[0].number);
+			if (before && parseInt(before.style.left) + before.offsetWidth / 2 > parseInt(ui.helper[0].style.left)) {
+				ui.helper[0].number = before.number;
+				before.number = ui.helper[0].number + 1;
+				this.setOrderedLeft(tabs);
+			} else if (behind && parseInt(behind.style.left) - behind.offsetWidth / 2 < parseInt(ui.helper[0].style.left)) {
+				behind.number = ui.helper[0].number;
+				ui.helper[0].number = behind.number + 1;
+				this.setOrderedLeft(tabs);
+			}
+		}.bind(tabs)
     });
 
+	tabs.assureNumbered($(".tab"));
+	tabs.setOrderedLeft($(".tab"));
+	
     $(".settings").on("mouseenter", ".option", function () {
         $(this).toggleClass("active");
         $(" > div", this).stop().fadeIn(150);
