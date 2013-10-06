@@ -57,7 +57,7 @@ $(document).ready(function () {
 				continue;
 			}
 			tabs[key].style.position = "absolute";
-			$(tabs[key]).animate({left: this.leftOffsetOf(tabs, tabs[key].number) + 200 + "px"}, {queu: false}); //Logo = 200
+			$(tabs[key]).stop(true).animate({left: this.leftOffsetOf(tabs, tabs[key].number) + 200 + "px"}, {queu: false}); //Logo = 200
 		}
 	};
 	
